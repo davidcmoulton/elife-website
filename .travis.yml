@@ -60,6 +60,9 @@ install:
   # Install latest Drush 7.
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - composer global require --prefer-dist --no-interaction drush/drush:7.*
+  - mkdir -p $HOME/.drush
+  - cp ./tests/build/travis.aliases.drushrc.php $HOME/.drush/elife.aliases.drushrc.php
+  - sed -i -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" $HOME/.drush/elife.aliases.drushrc.php
 
   # Disable sendmail
   - echo sendmail_path=`which true` >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini

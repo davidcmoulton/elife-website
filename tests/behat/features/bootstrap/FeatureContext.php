@@ -3,6 +3,7 @@
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Driver\GoutteDriver;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
+use Drupal\Driver\DrushDriver;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Drupal\elife_article\ElifeArticleVersion;
@@ -26,6 +27,16 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
 
   public function cleanRoles() {
     $this->roles = [];
+  }
+
+  /**
+   * @BeforeScenario
+   */
+  public function SetDefaultMockMarkupService() {
+    $this->getDrushDriver()->drush('variable-set', [
+      'elife_article_markup_service_factory',
+      '_elife_article_mock_markup_service',
+    ]);
   }
 
   /**
@@ -635,5 +646,31 @@ JS;
    */
   protected function fixStepArgument($argument) {
     return str_replace('\\"', '"', $argument);
+  }
+
+  /**
+   * @Given the search index is updated
+   */
+  public function searchIndexIsUpdated() {
+    $this->getDrushDriver()->drush('elysia-cron');
+  }
+
+  /**
+   * @return \Drupal\Driver\DrushDriver
+   */
+  public function getDrushDriver()
+  {
+    return $this->getDriver('drush');
+  }
+
+  /**
+   * @Given the markup service is available
+   */
+  public function markupServiceAvailable() {
+    // @todo - elife - nlisgo - We need the step until we can apply it automatically when the @markup tag is used.
+    $this->getDrushDriver()->drush('variable-set', [
+      'elife_article_markup_service_factory',
+      '_elife_article_mock_xsl_markup_service',
+    ]);
   }
 }

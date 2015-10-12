@@ -3,6 +3,9 @@ imports:
 
 default:
   extensions:
+    Drupal\DrupalExtension:
+      drush:
+        alias: 'elife.travis'
     eLife\IsolatedDrupalBehatExtension:
       db_url: 'mysql://root:@localhost/elife_profile'
     Zalas\Behat\NoExtension:

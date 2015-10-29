@@ -111,7 +111,7 @@
         triggerFigGroupJump(target);
       });
 
-      $(document).bind('hashchange', function () {
+      $(window).bind('hashchange', function () {
         // @todo - elife - nlisgo - If page accessed with fragment identifier then trigger mouseover
         triggerFigGroupReference(window.location.hash);
       });

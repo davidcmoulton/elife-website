@@ -22,23 +22,20 @@
         });
         $('a.table-expand-inline', context).once('eLifeArticleTablesMarkup', function() {
           $(this, context).each(function() {
-            var self = this,
-              $parent = $(self).closest('.table-expansion'),
-              toggle = true;
+            var $inlineToggler = $(this),
+              $table = $('table', $inlineToggler.closest('.table-expansion'));
 
-            $('table', $parent).hide();
-
-            $(self).click(function(event) {
+            $table.hide();
+            
+            $inlineToggler.click(function(event) {
+              var $target = $(this);
               event.preventDefault();
-              if (toggle) {
-                toggle = false;
-                $('table', $parent).show();
-                $(self).html('Collapse inline');
-              }
-              else {
-                toggle = true;
-                $('table', $parent).hide();
-                $(self).html('View inline');
+              if ($table.is(':hidden')) {
+                $table.show();
+                $target.html('Collapse inline');
+              } else {
+                $table.hide();
+                $target.html('View inline');
               }
             });
           });

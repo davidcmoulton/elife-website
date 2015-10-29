@@ -134,30 +134,33 @@
       // Colorbox modifications
       $(document).bind('cbox_complete', function(){
         if ($.colorbox.element().hasClass('figure-expand-popup')) {
-          // Disable the current trigger that shows the figure description
-          $('#cboxContent #cboxLoadedContent img').unbind('mouseover').unbind('mouseout');
-          $('#cboxOverlay').unbind('mouseover');
 
           // Decode the caption as it is in the data attribute and put it in the caption area
-          $('#cboxContent #cboxTitle').css('display', 'none');
-          var captionRaw = $.colorbox.element().data('figure-caption');
-          var caption = $("<div/>").html(captionRaw);
-          $('#cboxContent #cboxTitle').html(caption);
-
+          var decodeCaption = function() {
+            var $title = $('#cboxTitle', '#cboxContent');
+            var caption = $("<div/>").html($.colorbox.element().data('figure-caption'));
+            $title.css('display', 'none');
+            $title.html(caption);
+          };
           var href = $.colorbox.element().attr('href');
+          // Disable the current trigger that shows the figure description
+          $('img', '#cboxLoadedContent').unbind('mouseover').unbind('mouseout');
+          $('#cboxOverlay').unbind('mouseover');
 
-          $('#cboxContent #cboxCurrent .elife-cboxfigure-link-wrapper').remove();
+          decodeCaption();
+
+          $('.elife-cboxfigure-link-wrapper', '#cboxCurrent').remove();
           var $links = $('<span class="elife-cboxfigure-link-wrapper"/>');
 
           $links.append('<span class="elife-cboxfigure-link elife-cboxfigure-desc first"><a href="#">View caption</a><span> | ');
           $links.append('<span class="elife-cboxfigure-link elife-cboxfigure-wind"><a href="' + href + '" target="_blank">Open in new window</a><span> | ');
           $links.append('<span class="elife-cboxfigure-link elife-cboxfigure-down last"><a href="' + href + '?download=true">Download figure</a><span>');
 
-          $('#cboxContent #cboxCurrent').append($links);
-          $('#cboxContent #cboxCurrent').show();
+          $('#cboxCurrent', '#cboxContent').append($links);
+          $('#cboxCurrent', '#cboxContent').show();
 
           $('.elife-cboxfigure-desc a').click(function() {
-            $('#cboxContent #cboxTitle').toggle();
+            $('#cboxTitle', '#cboxContent').toggle();
             return false;
           });
 
@@ -165,7 +168,7 @@
       });
 
       $(document).bind('cbox_cleanup', function(){
-        $('#cboxContent #cboxTitle').empty();
+        $('#cboxTitle', '#cboxContent').empty();
       });
     }
   };
